@@ -1,0 +1,45 @@
+name: Pull Request Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [test, main]
+
+jobs:
+  review-required:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check if review is required
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const pr = context.payload.pull_request;
+          const repo = context.repo;
+          
+          // Check if PR is being merged into a protected branch
+          const targetBranch = pr.base.ref;
+          const protectedBranches = ['test', 'main'];
+          
+          if (protectedBranches.includes(targetBranch)) {
+            console.log(`PR #${pr.number} targets protected branch ${targetBranch}, checking review status...`);
+            
+            // Get reviews
+            const reviews = await github.rest.pulls.listReviews({
+              owner: repo.owner,
+              repo: repo.repo,
+              pull_number: pr.number
+            });
+            
+            // Check if there's an approved review
+            const hasApproval = reviews.data.some(review => review.state === 'APPROVED');
+            
+            if (!hasApproval) {
+              console.log('No approved reviews found, preventing merge');
+              core.setFailed('At least one approved review is required before merging to a protected branch');
+            } else {
+              console.log('Found approved review, PR can be merged');
+            }
+          } else {
+            console.log(`PR #${pr.number} targets non-protected branch ${targetBranch}, proceeding`);
+          } 

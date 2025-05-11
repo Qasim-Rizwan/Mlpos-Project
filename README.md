@@ -1,140 +1,116 @@
-# MLOps Project Automation Tools
+# Innovate Analytics MLOps Project
 
-This repository contains automation tools for MLOps project management, including sprint planning and Git branch management.
+This repository contains an end-to-end machine learning pipeline for Innovate Analytics Inc., including data processing, model training, and deployment infrastructure.
 
-## Tools Overview
+## Project Overview
 
-### 1. Sprint Planning Automation
+This project implements a complete MLOps workflow with:
 
-Tools for creating sprint milestones and user stories:
+- Sprint planning and team collaboration (GitHub Issues)
+- Environment management (Git branching strategy)
+- Automated data processing pipeline (Airflow)
+- ML model development with scikit-learn
+- Experiment tracking with MLflow
+- Data versioning with DVC
+- Automated testing and code quality checks (GitHub Actions)
+- Containerization with Docker
+- CI/CD pipeline with Jenkins
+- Kubernetes deployment
 
-- `github_sprint_planner_local.py` - Token-free local simulation of GitHub Issues and Milestones
-- `github_sprint_planner_rest.py` - Implements sprint planning using direct GitHub REST API calls
-- `visualize_sprint_planning.py` - Visualizes locally created sprint data
+## Repository Structure
 
-### 2. Branch Management Automation
-
-Tools for creating branch structure and protection rules:
-
-- `github_branch_manager.py` - Creates dev/test branches and generates branch protection configurations
-- `github_branch_manager_api.py` - Extended version that can apply branch protection rules via GitHub API
-
-## Prerequisites
-
-- Python 3.6+
-- For GitHub API integration: A GitHub Personal Access Token with repo scope
-
-## Installation
-
-1. Clone this repository
-2. Install the required packages:
-
-```bash
-pip install -r requirements.txt
+```
+├── .github/workflows/    # GitHub Actions workflows for CI
+├── dags/                 # Airflow DAG definitions
+├── k8s/                  # Kubernetes configuration files
+├── src/                  # Source code
+│   ├── data/             # Data processing scripts
+│   ├── models/           # ML model implementations
+│   ├── pipeline/         # Pipeline orchestration code
+│   ├── utils/            # Utility functions
+│   └── tests/            # Unit tests
+├── notebooks/            # Jupyter notebooks for experimentation
+├── Dockerfile            # Docker image definition
+├── Jenkinsfile           # Jenkins pipeline definition
+├── requirements.txt      # Python dependencies
+└── README.md             # Project documentation
 ```
 
-## Usage
+## Branching Strategy
 
-### Sprint Planning
+- `main`: Production environment (protected)
+- `test`: Testing/staging environment (protected)
+- `dev`: Development environment
+- feature branches: Used for individual feature development
 
-#### Token-free Local Simulation (Recommended)
+## Setup and Installation
 
-This approach doesn't require GitHub authentication and simulates sprint planning locally:
+### Local Development
 
-```bash
-python github_sprint_planner_local.py <owner> <repo_name> <stories_json_file>
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Qasim-Rizwan/Mlpos-Project.git
+   cd Mlpos-Project
+   ```
 
-For example:
-```bash
-python github_sprint_planner_local.py "myusername" "my-mlops-project" user_stories.json
-```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-To visualize the results:
-```bash
-python visualize_sprint_planning.py
-```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-#### GitHub API Integration
+### Running in Docker
 
-If you want to create actual GitHub issues (requires a token):
+1. Build the Docker image:
+   ```bash
+   docker build -t ml-model-api:latest .
+   ```
 
-1. Set your GitHub token as an environment variable:
+2. Run the container:
+   ```bash
+   docker run -p 8000:8000 ml-model-api:latest
+   ```
 
-```bash
-# For Windows PowerShell
-$env:GITHUB_TOKEN="your_token_here"
+### Deployment to Kubernetes
 
-# For Bash/Linux
-export GITHUB_TOKEN="your_token_here"
-```
+1. Apply the Kubernetes configurations:
+   ```bash
+   kubectl apply -f k8s/deployment.yaml
+   kubectl apply -f k8s/service.yaml
+   ```
 
-2. Run the REST API script with your repository details:
+## CI/CD Pipeline
 
-```bash
-python github_sprint_planner_rest.py <owner> <repo_name> <stories_json_file>
-```
+The CI/CD pipeline consists of:
 
-### Branch Management
+1. **Linting & Unit Tests**: Triggered on pushes to `dev` and PRs to `test`/`main`
+2. **Docker Build**: Builds and tags the application image
+3. **Docker Push**: Pushes the image to Docker Hub
+4. **Deployment**: Deploys to Kubernetes when code is merged to `main`
 
-#### Local Branch Creation and Protection Configuration
+## Data Pipeline
 
-Create dev/test branches and generate branch protection configurations without applying them:
+The data pipeline is orchestrated using Airflow DAGs and includes:
 
-```bash
-python github_branch_manager.py --owner <owner> --repo <repo_name>
-```
+1. Data extraction from sources
+2. Data transformation and cleaning
+3. Feature engineering
+4. Model training and evaluation
+5. Model deployment
 
-Example:
-```bash
-python github_branch_manager.py --owner "myusername" --repo "my-mlops-project"
-```
+## Model Serving API
 
-#### GitHub API Integration for Branch Protection
+The model is served via a FastAPI application with endpoints:
 
-To create branches and apply protection rules via GitHub API (requires a token):
+- `GET /health`: Health check endpoint
+- `POST /predict`: Make a single prediction
+- `POST /batch-predict`: Make predictions for multiple samples
 
-```bash
-python github_branch_manager_api.py --owner <owner> --repo <repo_name> --token <token> --apply-protection
-```
+## Team Collaboration
 
-To check if branches are already protected:
-```bash
-python github_branch_manager_api.py --owner <owner> --repo <repo_name> --token <token> --check-protection
-```
-
-## Branch Structure
-
-The branch management tools set up the following branch structure:
-
-- `main` - Production environment (protected)
-- `test` - Staging/testing environment (protected)
-- `dev` - Development environment
-
-Branch protection rules include:
-- Required pull request reviews (at least 1 approving review)
-- Required status checks (lint, unit-tests)
-- Disabled force pushes and deletions
-
-## JSON Format for User Stories
-
-The sprint planning tools use the following JSON format for user stories:
-
-```json
-[
-  {
-    "title": "Story title",
-    "description": "Detailed description",
-    "assignee": "username",
-    "labels": ["label1", "label2"],
-    "sprint": 1
-  }
-]
-```
-
-Where:
-- `title`: The title of the issue (required)
-- `description`: The detailed description for the issue body
-- `assignee`: Username of the assignee
-- `labels`: Array of label names to apply
-- `sprint`: Sprint number (1 or 2) (required) 
+Team members use the GitHub Issues system for sprint planning and task tracking. 

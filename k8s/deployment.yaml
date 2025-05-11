@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-model-api
+  labels:
+    app: ml-model-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ml-model-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ml-model-api
+    spec:
+      containers:
+      - name: ml-model-api
+        image: ${DOCKER_REGISTRY}/ml-model-api:${IMAGE_TAG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: MODEL_PATH
+          value: "/app/models/model.pkl"
+        - name: MLFLOW_TRACKING_URI
+          value: "http://mlflow-service:5000"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5 
