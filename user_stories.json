@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Implement data ingestion pipeline",
+    "description": "Create a pipeline to ingest data from source systems and store it in the data lake.",
+    "assignee": "data-engineer-username",
+    "labels": ["data-engineering", "high-priority"],
+    "sprint": 1
+  },
+  {
+    "title": "Set up model training infrastructure",
+    "description": "Configure computing resources and frameworks for model training.",
+    "assignee": "mlops-engineer-username",
+    "labels": ["infrastructure", "model-training"],
+    "sprint": 1
+  },
+  {
+    "title": "Develop feature extraction module",
+    "description": "Create a module to extract features from raw data for model training.",
+    "assignee": "ml-engineer-username",
+    "labels": ["feature-engineering", "model-training"],
+    "sprint": 1
+  },
+  {
+    "title": "Implement model versioning",
+    "description": "Set up a system to track and version ML models.",
+    "assignee": "mlops-engineer-username",
+    "labels": ["mlops", "model-management"],
+    "sprint": 2
+  },
+  {
+    "title": "Create model deployment pipeline",
+    "description": "Implement CI/CD pipeline for model deployment to production.",
+    "assignee": "devops-engineer-username",
+    "labels": ["deployment", "ci-cd"],
+    "sprint": 2
+  },
+  {
+    "title": "Set up model monitoring",
+    "description": "Implement monitoring for model performance and data drift.",
+    "assignee": "mlops-engineer-username",
+    "labels": ["monitoring", "mlops"],
+    "sprint": 2
+  }
+] 
