@@ -9,8 +9,7 @@ This repository contains automation tools for MLOps project management, includin
 Tools for creating sprint milestones and user stories:
 
 - `github_sprint_planner_local.py` - Token-free local simulation of GitHub Issues and Milestones
-- `github_sprint_planner.py` - Creates actual GitHub Issues and Milestones using the PyGithub library
-- `github_sprint_planner_rest.py` - Alternative implementation using direct REST API calls
+- `github_sprint_planner_rest.py` - Implements sprint planning using direct GitHub REST API calls
 - `visualize_sprint_planning.py` - Visualizes locally created sprint data
 
 ### 2. Branch Management Automation
@@ -70,13 +69,9 @@ $env:GITHUB_TOKEN="your_token_here"
 export GITHUB_TOKEN="your_token_here"
 ```
 
-2. Run the script with your repository details:
+2. Run the REST API script with your repository details:
 
 ```bash
-# Using PyGithub library
-python github_sprint_planner.py <owner> <repo_name> <stories_json_file>
-
-# OR using direct REST API calls
 python github_sprint_planner_rest.py <owner> <repo_name> <stories_json_file>
 ```
 
