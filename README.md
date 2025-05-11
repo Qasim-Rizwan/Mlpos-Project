@@ -1,25 +1,29 @@
-# GitHub Sprint Planning Automation
+# MLOps Project Automation Tools
 
-This project automates the process of creating sprints and user stories, similar to GitHub Issues.
+This repository contains automation tools for MLOps project management, including sprint planning and Git branch management.
 
-## Options
+## Tools Overview
 
-This repository provides multiple implementation options:
+### 1. Sprint Planning Automation
 
-1. **Token-free Local Simulation (Recommended)**:
-   - Uses local file storage to simulate GitHub issues and milestones
-   - Doesn't require GitHub authentication
-   - Great for planning without actual GitHub integration
+Tools for creating sprint milestones and user stories:
 
-2. **GitHub API Integration**:
-   - `github_sprint_planner.py` - Uses the PyGithub library
-   - `github_sprint_planner_rest.py` - Uses direct REST API calls
-   - Requires a GitHub personal access token with repo scope
+- `github_sprint_planner_local.py` - Token-free local simulation of GitHub Issues and Milestones
+- `github_sprint_planner.py` - Creates actual GitHub Issues and Milestones using the PyGithub library
+- `github_sprint_planner_rest.py` - Alternative implementation using direct REST API calls
+- `visualize_sprint_planning.py` - Visualizes locally created sprint data
+
+### 2. Branch Management Automation
+
+Tools for creating branch structure and protection rules:
+
+- `github_branch_manager.py` - Creates dev/test branches and generates branch protection configurations
+- `github_branch_manager_api.py` - Extended version that can apply branch protection rules via GitHub API
 
 ## Prerequisites
 
 - Python 3.6+
-- For the GitHub API integration, a GitHub Personal Access Token with repo scope
+- For GitHub API integration: A GitHub Personal Access Token with repo scope
 
 ## Installation
 
@@ -32,9 +36,11 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Token-free Local Simulation (Recommended)
+### Sprint Planning
 
-This approach doesn't require GitHub authentication and simulates the creation of sprints and issues locally:
+#### Token-free Local Simulation (Recommended)
+
+This approach doesn't require GitHub authentication and simulates sprint planning locally:
 
 ```bash
 python github_sprint_planner_local.py <owner> <repo_name> <stories_json_file>
@@ -45,14 +51,12 @@ For example:
 python github_sprint_planner_local.py "myusername" "my-mlops-project" user_stories.json
 ```
 
-The results will be stored in the `local_github_simulation` directory, with separate subdirectories for milestones and issues.
-
-To visualize the results in a more GitHub-like format:
+To visualize the results:
 ```bash
 python visualize_sprint_planning.py
 ```
 
-### GitHub API Integration
+#### GitHub API Integration
 
 If you want to create actual GitHub issues (requires a token):
 
@@ -76,16 +80,57 @@ python github_sprint_planner.py <owner> <repo_name> <stories_json_file>
 python github_sprint_planner_rest.py <owner> <repo_name> <stories_json_file>
 ```
 
-## JSON Format
+### Branch Management
 
-The user stories should be in the following format:
+#### Local Branch Creation and Protection Configuration
+
+Create dev/test branches and generate branch protection configurations without applying them:
+
+```bash
+python github_branch_manager.py --owner <owner> --repo <repo_name>
+```
+
+Example:
+```bash
+python github_branch_manager.py --owner "myusername" --repo "my-mlops-project"
+```
+
+#### GitHub API Integration for Branch Protection
+
+To create branches and apply protection rules via GitHub API (requires a token):
+
+```bash
+python github_branch_manager_api.py --owner <owner> --repo <repo_name> --token <token> --apply-protection
+```
+
+To check if branches are already protected:
+```bash
+python github_branch_manager_api.py --owner <owner> --repo <repo_name> --token <token> --check-protection
+```
+
+## Branch Structure
+
+The branch management tools set up the following branch structure:
+
+- `main` - Production environment (protected)
+- `test` - Staging/testing environment (protected)
+- `dev` - Development environment
+
+Branch protection rules include:
+- Required pull request reviews (at least 1 approving review)
+- Required status checks (lint, unit-tests)
+- Disabled force pushes and deletions
+
+## JSON Format for User Stories
+
+The sprint planning tools use the following JSON format for user stories:
 
 ```json
 [
   {
     "title": "Story title",
     "description": "Detailed description",
-    "assignee": "github-username",
+    "assignee": "username",
     "labels": ["label1", "label2"],
     "sprint": 1
   }
@@ -97,13 +142,4 @@ Where:
 - `description`: The detailed description for the issue body
 - `assignee`: Username of the assignee
 - `labels`: Array of label names to apply
-- `sprint`: Sprint number (1 or 2) (required)
-
-## Features
-
-- Creates two sprint milestones one week apart
-- Creates issues for each user story
-- Assigns issues to team members
-- Applies labels to issues
-- Groups issues under the appropriate sprint milestone
-- Prints a summary table of all created issues 
+- `sprint`: Sprint number (1 or 2) (required) 

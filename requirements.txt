@@ -1,6 +1,8 @@
-# Required for all versions
+# Required for all scripts
 tabulate==0.9.0
 
-# Optional - only needed for the GitHub API versions:
-# PyGithub==1.58.2
-# requests==2.31.0 
+# Required for branch management scripts
+requests==2.31.0
+
+# Optional - only needed for GitHub API sprint planning:
+# PyGithub==1.58.2 

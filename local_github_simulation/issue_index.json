@@ -1,0 +1,41 @@
+{
+  "repository": "Qasim-Rizwan/Mlpos-Project",
+  "issues": [
+    [
+      84189,
+      "Implement data ingestion pipeline",
+      "data-engineer-username",
+      "Sprint 1"
+    ],
+    [
+      84189,
+      "Set up model training infrastructure",
+      "mlops-engineer-username",
+      "Sprint 1"
+    ],
+    [
+      84189,
+      "Develop feature extraction module",
+      "ml-engineer-username",
+      "Sprint 1"
+    ],
+    [
+      84189,
+      "Implement model versioning",
+      "mlops-engineer-username",
+      "Sprint 2"
+    ],
+    [
+      84189,
+      "Create model deployment pipeline",
+      "devops-engineer-username",
+      "Sprint 2"
+    ],
+    [
+      84189,
+      "Set up model monitoring",
+      "mlops-engineer-username",
+      "Sprint 2"
+    ]
+  ]
+}
